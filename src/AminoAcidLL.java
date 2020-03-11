@@ -18,14 +18,23 @@ class AminoAcidLL{
     aminoAcid = AminoAcidResources.getAminoAcidFromCodon(inCodon);
     codons = AminoAcidResources.getCodonListForAminoAcid(aminoAcid);
     counts = new int[codons.length];
+    incrCodons(inCodon);
+
+  }
+
+  /********************************************************************************************/
+  /* Helper method to increment the codon counter
+   */
+
+  public void incrCodons(String c){
 
   }
 
   /********************************************************************************************/
   /* Recursive method that increments the count for a specific codon:
-   * If it should be at this node, increments it and stops, 
-   * if not passes the task to the next node. 
-   * If there is no next node, add a new node to the list that would contain the codon. 
+   * If it should be at this node, increments it and stops,
+   * if not passes the task to the next node.
+   * If there is no next node, add a new node to the list that would contain the codon.
    */
   private void addCodon(String inCodon){
   
@@ -95,7 +104,13 @@ class AminoAcidLL{
   /********************************************************************************************/
   /* Static method for generating a linked list from an RNA sequence */
   public static AminoAcidLL createFromRNASequence(String inSequence){
-    
+    AminoAcidLL head = null;
+    AminoAcidLL iter = null;
+
+    while(inSequence.length() > 0) {
+      String word = inSequence.substring(0, 3);
+
+    }
     return null;
   }
 
