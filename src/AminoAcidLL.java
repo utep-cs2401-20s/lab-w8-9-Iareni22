@@ -87,16 +87,42 @@ class AminoAcidLL{
   /* Recursive method that finds the differences in **Amino Acid** counts. 
    * the list *must* be sorted to use this method */
   public int aminoAcidCompare(AminoAcidLL inList) {//use total count
+    if(!inList.isSorted()){
+      System.out.print("List not sorted");
+      return -1;
+    }
+    if(next == null && inList.next == null){
+      return totalDiff(inList);
+    }
+    if(inList.next == null){
+      return totalCount() + next.aminoAcidCompare(inList);
+    }
+    if(next == null){
+      return totalCount() + aminoAcidCompare(inList.next);
+    }
 
-    return 0;
+    return totalDiff(inList) + (next.aminoAcidCompare(inList.next));
   }
 
   /********************************************************************************************/
   /* Same ad above, but counts the codon usage differences
    * Must be sorted. */
   public int codonCompare(AminoAcidLL inList){// use codonDiff
+    if(!inList.isSorted()){
+      System.out.print("List not sorted");
+      return -1;
+    }
+    if(next == null && inList.next == null){
+      return totalDiff(inList);
+    }
+    if(inList.next == null){
+      return totalCount() + next.codonCompare(inList);
+    }
+    if(next == null){
+      return totalCount() + codonCompare(inList.next);
+    }
 
-    return 0;
+    return codonDiff(inList) + (next.codonCompare(inList.next));
   }
 
 
@@ -127,12 +153,10 @@ class AminoAcidLL{
     int[] a = next.aminoAcidCounts();
     int[] result = new int[a.length + 1];
 
-    result[0] = totalCount();
-
-    for(int i = 1; i < a.length; i++){
-      System.out.print(a[i] + " ");
+    for(int i = 0; i < a.length; i++){
       result[i + 1] = a[i];
     }
+    result[0] = totalCount();
     return result;
   }
 
@@ -173,31 +197,44 @@ class AminoAcidLL{
   /********************************************************************************************/
   /* sorts a list by amino acid character*/
   public static AminoAcidLL sort(AminoAcidLL inList){
-    AminoAcidLL numIter = inList;
-    AminoAcidLL iter = new AminoAcidLL();
-    AminoAcidLL manipulated = inList;
 
-    if(inList == null){
-      return inList;
-    }
     if(inList.isSorted()){
       return inList;
     }
-    while(numIter != null){
-      iter = inList.next;
-
-      while(iter != null){
-        if(inList.aminoAcid > iter.aminoAcid){
-          AminoAcidLL temp = iter.next;
-          iter.next = inList;
-          inList.next = temp.next;
-
+    AminoAcidLL iter = inList;
+    AminoAcidLL min;
+    AminoAcidLL traverse;
+    AminoAcidLL previous;
+    AminoAcidLL start = inList;
+    
+    while(iter.next != null){
+      min = iter;
+      previous = min;
+      traverse = iter.next;
+      
+      while(traverse != null) {
+        if (traverse.aminoAcid < min.aminoAcid) {
+          min = traverse;
         }
+        traverse = traverse.next;
       }
+        if(previous == min){
+          iter = iter.next;
+          continue;
+        }
+      
+      while(previous.next != min){
+        previous = previous.next;
+      }
+
+      previous.next = min.next;
+      min.next = iter;
+      if(start != iter){
+        start.next = min;
+      }
+      start = min;
     }
-
     return inList;
-
   }
 
 }
