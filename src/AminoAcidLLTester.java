@@ -4,17 +4,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AminoAcidLLTest {
     @Test
-    public void createFromRNASequence1(){
-        String sequence = "GCUACGGAGCUU";
+    public void isSorted1(){
+        String sequence = "GCCUACUGU";
         AminoAcidLL A = AminoAcidLL.createFromRNASequence(sequence);
-        char[] B = A.aminoAcidList();
-        for(int i = 0; i < B.length;i++){
-            System.out.print(B[i]);
-        }
-        char[] C = {' ', 'A', 'T', 'E', 'L'};
+        char[] B = {'\0', 'A', 'C', 'T'};
+        char[] C = AminoAcidLL.sort(A).aminoAcidList();
+    }
 
-        assertArrayEquals(C, B);
+    @Test
+    public void aminoAcidList1(){
+        String sequence = "GCCUACUGU";
+        AminoAcidLL A = AminoAcidLL.createFromRNASequence(sequence);
+        char[] B = {'A', 'T', 'C'};
+        char[] C = A.aminoAcidList();
 
+        assertArrayEquals(B, C);
     }
 
 }

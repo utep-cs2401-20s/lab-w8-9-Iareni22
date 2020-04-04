@@ -110,19 +110,30 @@ class AminoAcidLL{
     char[] a = next.aminoAcidList();
     char[] result = new char[a.length + 1];
 
-    result[0] = aminoAcid;
-
-    for(int i = 1; i < a.length; i++){
+    for(int i = 0; i < a.length; i++){
         result[i + 1] = a[i];
     }
+    result[0] = aminoAcid;
     return result;
   }
 
   /********************************************************************************************/
   /* Recursively returns the total counts of amino acids in the order that they are in in the linked list. */
   public int[] aminoAcidCounts(){
+    if(next == null){
+      return new int[]{totalCount()};
+    }
 
-    return new int[]{};
+    int[] a = next.aminoAcidCounts();
+    int[] result = new int[a.length + 1];
+
+    result[0] = totalCount();
+
+    for(int i = 1; i < a.length; i++){
+      System.out.print(a[i] + " ");
+      result[i + 1] = a[i];
+    }
+    return result;
   }
 
 
@@ -132,17 +143,17 @@ class AminoAcidLL{
     if(next == null){
       return true;
     }
-    else if(aminoAcid < next.aminoAcid){
-      next.isSorted();
+    else if(aminoAcid > next.aminoAcid){
+      return false;
     }
-    return false;
+    return next.isSorted();
   }
 
 
   /********************************************************************************************/
   /* Static method for generating a linked list from an RNA sequence */
   public static AminoAcidLL createFromRNASequence(String inSequence){
-    AminoAcidLL result = new AminoAcidLL();
+    AminoAcidLL result = new AminoAcidLL(inSequence.substring(0, 3));
 
     while(inSequence.length() > 0) {
       String word = inSequence.substring(0, 3);
@@ -162,11 +173,31 @@ class AminoAcidLL{
   /********************************************************************************************/
   /* sorts a list by amino acid character*/
   public static AminoAcidLL sort(AminoAcidLL inList){
+    AminoAcidLL numIter = inList;
+    AminoAcidLL iter = new AminoAcidLL();
+    AminoAcidLL manipulated = inList;
+
+    if(inList == null){
+      return inList;
+    }
     if(inList.isSorted()){
       return inList;
     }
+    while(numIter != null){
+      iter = inList.next;
 
-    return null;
+      while(iter != null){
+        if(inList.aminoAcid > iter.aminoAcid){
+          AminoAcidLL temp = iter.next;
+          iter.next = inList;
+          inList.next = temp.next;
+
+        }
+      }
+    }
+
+    return inList;
+
   }
 
 }
