@@ -147,5 +147,6 @@ class AminoAcidLLTest {
         AminoAcidLL.sort(A);
         assertTrue(A.isSorted());
     }
+    
 
 }
